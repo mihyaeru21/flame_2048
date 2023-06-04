@@ -1,10 +1,11 @@
 import 'package:flame/components.dart';
-import 'package:flame_2048/tzfe_game.dart';
+import 'package:flame_2048/colors.dart';
+import 'package:flame_2048/consts.dart';
 import 'package:flutter/painting.dart';
 
 class TileNumberText extends TextBoxComponent {
   static const style = TextStyle(
-    color: Color(0xFF766c62),
+    color: Colors.tileText,
     fontSize: 250,
     fontWeight: FontWeight.w900,
   );
@@ -27,10 +28,10 @@ class Tile extends PositionComponent {
   final int iy;
   final int number;
 
-  static final tilePaint1 = Paint()..color = const Color(0xFFeee4da);
-  static final tilePaint2 = Paint()..color = const Color(0xFFf5b27e);
-  static final tilePaint3 = Paint()..color = const Color(0xFFecc402);
-  static final tilePaint4 = Paint()..color = const Color(0xFFf77b5f);
+  static final tilePaint1 = Paint()..color = Colors.tileBackground1;
+  static final tilePaint2 = Paint()..color = Colors.tileBackground2;
+  static final tilePaint3 = Paint()..color = Colors.tileBackground3;
+  static final tilePaint4 = Paint()..color = Colors.tileBackground4;
 
   Tile(this.ix, this.iy, this.number);
 
@@ -51,7 +52,7 @@ class Tile extends PositionComponent {
   @override
   void render(Canvas canvas) {
     final RRect tileRRect = RRect.fromRectAndRadius(
-      TzfeGame.tileSize.toRect(),
+      Consts.tileSize.toRect(),
       const Radius.circular(60.0),
     );
 

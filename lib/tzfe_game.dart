@@ -1,45 +1,59 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_2048/colors.dart';
 import 'package:flame_2048/components/grid.dart';
-import 'package:flame_2048/components/tile.dart';
+import 'package:flame_2048/components/high_score.dart';
+import 'package:flame_2048/components/reset.dart';
+import 'package:flame_2048/components/score.dart';
+import 'package:flame_2048/consts.dart';
+import 'package:flutter/painting.dart';
 
 class TzfeGame extends FlameGame {
-  static const double tileWidth = 400.0;
-  static const double tileGap = 40.0;
-  static final Vector2 tileSize = Vector2(tileWidth, tileWidth);
-
   @override
   Future<void> onLoad() async {
-    const gridSize = tileGap * 5 + tileWidth * 4;
+    const tw = Consts.tileWidth;
+    const tg = Consts.tileGap;
+
+    const cameraWidth = tw * 4 + tg * 7;
+    const cameraHeight = tw * 6 + tg * 9;
+
+    const gridWidth = tg * 5 + tw * 4;
     final grid = Grid()
-      ..size = Vector2(gridSize, gridSize)
-      ..position = Vector2(tileGap, tileGap);
+      ..size = Vector2(gridWidth, gridWidth)
+      ..position = Vector2(tg, tw + tg * 2);
 
-    final tiles = List.generate(11, (i) {
-      final int xi = i % 4;
-      final int yi = (i / 4).floor();
-      final int number = pow(2, i + 1).toInt();
+    final scoreSize = Vector2(tw * 3, tw);
+    final score = Score()
+      ..size = scoreSize
+      ..position = Vector2(cameraWidth / 2, tg)
+      ..anchor = Anchor.topCenter;
 
-      return Tile(xi, yi, number)
-        ..size = tileSize
-        ..position = Vector2(
-          tileGap + xi * (tileWidth + tileGap),
-          tileGap + yi * (tileWidth + tileGap),
-        );
-    });
-    grid.addAll(tiles);
+    const yOffset = gridWidth + tw + tg * 3;
+    final reset = Reset()
+      ..size = Vector2(tw, tw)
+      ..position = Vector2(tw / 2 + tg * 2, yOffset)
+      ..anchor = Anchor.topLeft;
 
-    final world = World()..add(grid);
+    final highScore = HighScore()
+      ..size = Vector2(tw * 2, tw)
+      ..position = Vector2(cameraWidth - tg * 2 - tw / 2, yOffset)
+      ..anchor = Anchor.topRight;
+
+    final world = World()
+      ..add(grid)
+      ..add(score)
+      ..add(reset)
+      ..add(highScore);
     add(world);
 
-    const cameraSize = tileGap * 7 + tileWidth * 4;
     final camera = CameraComponent(world: world)
-      ..viewfinder.visibleGameSize = Vector2(cameraSize, cameraSize)
-      ..viewfinder.position = Vector2(cameraSize / 2.0, 0)
+      ..viewfinder.visibleGameSize = Vector2(cameraWidth, cameraHeight)
+      ..viewfinder.position = Vector2(cameraWidth / 2.0, 0)
       ..viewfinder.anchor = Anchor.topCenter;
     add(camera);
   }
+
+  @override
+  Color backgroundColor() => Colors.background;
 }
