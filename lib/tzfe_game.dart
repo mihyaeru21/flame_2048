@@ -7,18 +7,27 @@ import 'package:flame_2048/components/high_score.dart';
 import 'package:flame_2048/components/reset.dart';
 import 'package:flame_2048/components/score.dart';
 import 'package:flame_2048/consts.dart';
+import 'package:flame_2048/game_state.dart';
 import 'package:flutter/painting.dart';
 
 class TzfeGame extends FlameGame {
+  late final GameState gameState;
+
+  TzfeGame() {
+    gameState = GameState(Consts.rows, Consts.cols);
+  }
+
   @override
   Future<void> onLoad() async {
+    const r = Consts.rows;
+    const c = Consts.cols;
     const tw = Consts.tileWidth;
     const tg = Consts.tileGap;
 
-    const cameraWidth = tw * 4 + tg * 7;
-    const cameraHeight = tw * 6 + tg * 9;
+    const cameraWidth = tw * c + tg * (c + 3);
+    const cameraHeight = tw * (r + 2) + tg * (r + 5);
 
-    const gridWidth = tg * 5 + tw * 4;
+    const gridWidth = tw * c + tg * (c + 1);
     final grid = Grid()
       ..size = Vector2(gridWidth, gridWidth)
       ..position = Vector2(tg, tw + tg * 2);
